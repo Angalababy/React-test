@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import PropTypes from 'prop-types'
 import {
   Form,
   Icon,
@@ -7,8 +8,12 @@ import {
   message
 } from 'antd';
 
+
 const Item = Form.Item
 class LoginForm extends Component {
+  static propTypes={
+    login:PropTypes.func.isRequired
+  }
 
   checkpassword = (rule, value, callback) => {
 
@@ -28,10 +33,16 @@ class LoginForm extends Component {
   handleSubmit = e => {
     e.preventDefault()
     const{validateFields,resetFields}=this.props.form
-    validateFields((error,values)=>{
+
+
+    validateFields(async(error,values)=>{
       if(!error){
         //校验通过
         console.log('收集的表单数据',values);
+        const{username,password}=values
+        //发送ajax请求
+        this.props.login(username,password)
+
       }else {
         //校验失败
         //重置密码
